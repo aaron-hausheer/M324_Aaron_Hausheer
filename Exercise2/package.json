@@ -1,12 +1,14 @@
 {
   "name": "exercise2",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "mocha \"*.test.js\""
+    "test": "mocha \"*.test.js\"",
+    "start": "npm run format && npm run lint && npm run test && node index.js"
   },
   "keywords": [],
   "author": "",
