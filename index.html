@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Fuenf Fragen aus dem Informatik-Alltag: das kleine Lernenden-Quiz von Aaron Hausheer.">
+  <title>Commit & Kaffee | Aaron Hausheer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap');
+    :root { --ink: #172821; --green: #176447; --paper: #f7faf8; --line: #ccd8d0; --pink: #f7dce5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0; }
+    header { border-bottom: 1px solid var(--line); background: white; }
+    .topbar { max-width: 1040px; margin: auto; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .brand { font: 700 22px 'Space Grotesk', sans-serif; }
+    .module { font-size: 14px; }
+    main { max-width: 1040px; margin: auto; padding: 48px 28px; }
+    .intro { display: grid; grid-template-columns: 1fr 180px; align-items: center; gap: 24px; padding-bottom: 32px; }
+    .eyebrow { color: var(--green); font-weight: 600; font-size: 13px; text-transform: uppercase; }
+    h1 { font: 700 42px/1.1 'Space Grotesk', sans-serif; margin: 12px 0; }
+    .intro p { margin: 0; font-size: 18px; }
+    .illustration { width: 180px; height: 140px; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 240px; border-top: 2px solid var(--ink); }
+    .quiz { padding: 28px 32px 28px 0; min-width: 0; }
+    .question-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--green); }
+    progress { display: block; width: 100%; height: 6px; margin: 16px 0 28px; accent-color: var(--green); }
+    h2 { font: 700 25px/1.35 'Space Grotesk', sans-serif; margin: 0 0 24px; }
+    .answers { display: grid; gap: 10px; }
+    button { font: inherit; cursor: pointer; border-radius: 4px; transition: background .15s; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #bf4e20; outline-offset: 4px; }
+    .answer { text-align: left; padding: 16px; border: 1px solid var(--line); background: white; color: var(--ink); width: 100%; overflow-wrap: anywhere; }
+    .answer:hover:not(:disabled) { background: #e4eee8; border-color: var(--green); }
+    .answer:disabled { cursor: default; opacity: 1; }
+    .answer.correct { background: #d6efdf; border-color: var(--green); }
+    .answer.wrong { background: var(--pink); border-color: #b8496b; }
+    .feedback { min-height: 76px; padding: 18px 0; margin: 0; line-height: 1.5; }
+    .primary { padding: 12px 22px; background: var(--green); border: 1px solid var(--green); color: white; font-weight: 600; }
+    .primary:hover { background: #104b35; }
+    [hidden] { display: none !important; }
+    aside { padding: 28px 0 28px 28px; border-left: 1px solid var(--line); }
+    aside h2 { font-size: 17px; margin-bottom: 20px; }
+    .score { font: 700 52px 'Space Grotesk', sans-serif; margin: 0; }
+    .score-label { margin: 4px 0 28px; font-size: 14px; }
+    .topics { list-style: none; padding: 0; margin: 0; }
+    .topics li { padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    footer { max-width: 1040px; margin: auto; padding: 24px 28px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+    a { color: var(--green); }
+    @media (max-width: 650px) {
+      .topbar, footer { flex-wrap: wrap; }
+      main { padding: 32px 20px; }
+      .intro { grid-template-columns: 1fr; gap: 16px; }
+      h1 { font-size: 34px; }
+      .illustration { width: 135px; height: 105px; }
+      .workspace { grid-template-columns: 1fr; }
+      .quiz { padding-right: 0; }
+      aside { border-left: 0; border-top: 1px solid var(--line); padding: 24px 0 0; }
+      .topics { display: flex; flex-wrap: wrap; gap: 0 20px; }
+      .score { font-size: 36px; }
+    }
+    @media (prefers-reduced-motion: reduce) { button { transition: none; } }
+  </style>
+</head>
+<body>
+  <header><div class="topbar"><span class="brand">Commit & Kaffee</span><span class="module">Aaron Hausheer / M324</span></div></header>
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <div><span class="eyebrow">Das Lernenden-Quiz</span><h1 id="title">Erst denken.<br>Dann deployen.</h1><p>Fuenf Fragen. Ein Informatik-Alltag. Wie fit bist du?</p></div>
+      <svg class="illustration" viewBox="0 0 180 140" role="img" aria-labelledby="art-title">
+        <title id="art-title">Ein Terminal mit erfolgreichem Build neben einer Kaffeetasse</title>
+        <rect x="2" y="10" width="136" height="96" rx="4" fill="#172821"/>
+        <path d="M2 32H138" stroke="#64786b"/>
+        <circle cx="14" cy="21" r="3" fill="#f1a5ba"/><circle cx="25" cy="21" r="3" fill="#f1c36e"/><circle cx="36" cy="21" r="3" fill="#8bd4a5"/>
+        <path d="M18 49L26 56L18 63M34 64H54" fill="none" stroke="#8bd4a5" stroke-width="3"/>
+        <path d="M18 80H90M18 89H65" stroke="#f7faf8" stroke-width="3"/>
+        <path d="M54 108V120M30 122H110" stroke="#172821" stroke-width="4"/>
+        <path d="M136 85H166V116Q151 128 136 116Z" fill="#f7dce5" stroke="#172821" stroke-width="3"/>
+        <path d="M167 90Q181 90 176 103Q174 110 166 108M145 75V65M156 75V60" fill="none" stroke="#172821" stroke-width="3"/>
+      </svg>
+    </section>
+    <div class="workspace">
+      <section class="quiz" aria-labelledby="question">
+        <div class="question-meta"><span id="counter">Frage 1 / 5</span><span id="category">Git</span></div>
+        <progress id="progress" value="0" max="5" aria-label="Beantwortete Fragen"></progress>
+        <h2 id="question" tabindex="-1"></h2>
+        <div class="answers" id="answers"></div>
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        <button class="primary" id="next" hidden>Naechste Frage</button>
+        <button class="primary" id="restart" hidden>Neu starten</button>
+        <noscript>Bitte aktiviere JavaScript, um das Quiz zu spielen.</noscript>
+      </section>
+      <aside aria-label="Punktestand und Themen"><h2>Dein Check-in</h2><p class="score" id="score">0 / 5</p><p class="score-label">Richtige Antworten</p><ul class="topics"><li>01 / Git</li><li>02 / Releases</li><li>03 / Deployment</li><li>04 / Datenbanken</li><li>05 / Sicherheit</li></ul></aside>
+    </div>
+  </main>
+  <footer><span>Zwischen Berufsschule und naechstem Commit.</span><a href="https://github.com/aaron-hausheer/M324_Aaron_Hausheer">Zum Repository</a></footer>
+  <script>
+    const questions = [
+      { category: 'Git', text: 'Der Code funktioniert. Was gehoert in einen guten Commit?', answers: ['Alle Dateien, auch Passwoerter.', 'Eine zusammenhaengende Aenderung mit klarer Nachricht.', 'Moeglichst viele unabhaengige Aenderungen.'], correct: 1, explanation: 'Kleine, zusammenhaengende Commits sind einfacher zu verstehen, zu pruefen und bei Bedarf rueckgaengig zu machen.' },
+      { category: 'Releases', text: 'Wozu dient ein Git-Tag wie v1.0.0?', answers: ['Er markiert einen bestimmten Stand im Repository.', 'Er erstellt automatisch eine Datenbank.', 'Er ersetzt alle bisherigen Commits.'], correct: 0, explanation: 'Ein Tag markiert einen bestimmten Commit. Ein GitHub Release ergaenzt diesen Stand um Titel, Beschreibung und optionale Dateien.' },
+      { category: 'Deployment', text: 'Was kann GitHub Pages direkt ausliefern?', answers: ['Einen laufenden Node.js-Server.', 'Eine private PostgreSQL-Datenbank.', 'Statische HTML-, CSS- und JavaScript-Dateien.'], correct: 2, explanation: 'GitHub Pages hostet statische Dateien. Serverseitige Logik braucht einen separaten Backend-Dienst.' },
+      { category: 'Datenbanken', text: 'Deine Website braucht eine Datenbank. Welche Architektur passt?', answers: ['Das Datenbankpasswort direkt in JavaScript schreiben.', 'Die Website ruft eine abgesicherte Backend-API auf.', 'Die Datenbankdatei oeffentlich ins Repository legen.'], correct: 1, explanation: 'Eine Backend-API prueft Berechtigungen und greift auf die Datenbank zu. Zugangsdaten bleiben auf dem Server.' },
+      { category: 'Sicherheit', text: 'Ein geheimer API-Schluessel wurde veroeffentlicht. Was zuerst?', answers: ['Nur den letzten Commit loeschen.', 'Den Dateinamen aendern.', 'Den Schluessel sperren und ersetzen.'], correct: 2, explanation: 'Ein veroeffentlichtes Geheimnis gilt als kompromittiert. Zuerst sperren und ersetzen, danach auch die Git-Historie bereinigen.' }
+    ];
+    const questionHeading = document.getElementById('question');
+    const answers = document.getElementById('answers');
+    const feedback = document.getElementById('feedback');
+    const next = document.getElementById('next');
+    const restart = document.getElementById('restart');
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    function renderQuestion() {
+      answered = false;
+      const question = questions[current];
+      document.getElementById('counter').textContent = `Frage ${current + 1} / ${questions.length}`;
+      document.getElementById('category').textContent = question.category;
+      questionHeading.textContent = question.text;
+      answers.replaceChildren();
+      feedback.textContent = '';
+      next.hidden = true;
+      restart.hidden = true;
+      question.answers.forEach((text, index) => {
+        const button = document.createElement('button');
+        button.className = 'answer';
+        button.textContent = text;
+        button.addEventListener('click', () => selectAnswer(index));
+        answers.append(button);
+      });
+    }
+
+    function selectAnswer(selected) {
+      if (answered) return;
+      answered = true;
+      const question = questions[current];
+      const correct = selected === question.correct;
+      if (correct) score += 1;
+      Array.from(answers.children).forEach((button, index) => {
+        button.disabled = true;
+        if (index === question.correct) button.classList.add('correct');
+        else if (index === selected) button.classList.add('wrong');
+      });
+      document.getElementById('score').textContent = `${score} / ${questions.length}`;
+      document.getElementById('progress').value = current + 1;
+      feedback.textContent = `${correct ? 'Richtig!' : 'Nicht ganz.'} ${question.explanation}`;
+      next.textContent = current === questions.length - 1 ? 'Ergebnis ansehen' : 'Naechste Frage';
+      next.hidden = false;
+      next.focus();
+    }
+
+    next.addEventListener('click', () => {
+      current += 1;
+      if (current < questions.length) renderQuestion();
+      else {
+        questionHeading.textContent = score === questions.length ? 'Bereit fuer den naechsten Release.' : 'Check abgeschlossen. Kaffee verdient.';
+        document.getElementById('counter').textContent = 'Quiz abgeschlossen';
+        document.getElementById('category').textContent = 'Ergebnis';
+        answers.replaceChildren();
+        feedback.textContent = `Du hast ${score} von ${questions.length} Fragen richtig beantwortet.`;
+        next.hidden = true;
+        restart.hidden = false;
+      }
+      questionHeading.focus();
+    });
+
+    restart.addEventListener('click', () => {
+      current = 0;
+      score = 0;
+      document.getElementById('score').textContent = '0 / 5';
+      document.getElementById('progress').value = 0;
+      renderQuestion();
+      questionHeading.focus();
+    });
+
+    renderQuestion();
+  </script>
+</body>
+</html>
